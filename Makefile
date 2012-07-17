@@ -50,6 +50,18 @@ test:
 	kill -9 `cat js/tests/pid.txt`
 	rm js/tests/pid.txt
 
+docs: bootstrap
+	zip -r docs/assets/bootstrap.zip bootstrap
+	rm -r bootstrap
+	lessc ${BOOTSTRAP_LESS} > ${BOOTSTRAP}
+	lessc ${BOOTSTRAP_RESPONSIVE_LESS} > ${BOOTSTRAP_RESPONSIVE}
+	node docs/build
+	mkdir -p docs/assets/fonts
+	cp img/* docs/assets/img/
+	cp js/*.js docs/assets/js/
+	cp js/tests/vendor/jquery.js docs/assets/js/
+	cp fonts/* docs/assets/fonts/
+
 #
 # BUILD SIMPLE BOOTSTRAP DIRECTORY
 # recess & uglifyjs are required
@@ -59,7 +71,9 @@ bootstrap:
 	mkdir -p bootstrap/img
 	mkdir -p bootstrap/css
 	mkdir -p bootstrap/js
+	mkdir -p bootstrap/fonts
 	cp img/* bootstrap/img/
+	cp fonts/* bootstrap/fonts/s
 	recess --compile ${BOOTSTRAP_LESS} > bootstrap/css/bootstrap.css
 	recess --compress ${BOOTSTRAP_LESS} > bootstrap/css/bootstrap.min.css
 	recess --compile ${BOOTSTRAP_RESPONSIVE_LESS} > bootstrap/css/bootstrap-responsive.css
